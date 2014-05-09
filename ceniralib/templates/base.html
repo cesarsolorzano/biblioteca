@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>{% block title %}{% endblock %} | CENIRA | PAN</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.1/jquery.min.js"></script>
+    <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+
+    
+    {% block head %}{% endblock %}
+    <style type="text/css">
+body {  margin-top: 60px;}
+    </style>
+  </head>
+<body>
+
+{% include "/cesar/nav.html" ignore missing %}
+
+<!-- CONTAINER -->
+
+  {% block html %}
+  {% endblock %}
+<!-- END CONTAINER -->
+
+
+
+{% include "/stivali/footer.html" ignore missing %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+
+{% block scriptfooter %}
+{% endblock %}
+
+
+     </body>
+</html>

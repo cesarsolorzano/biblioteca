@@ -1,0 +1,48 @@
+
+{% extends "base.html" %}
+<!-- En base.html existen bloques, como por ejemplo 'title' -->
+{% block title %}
+Agregar
+{% endblock %}
+
+
+
+{% block html %}
+
+    <div class="container">
+
+        <div class="jumbotron hero-spacer">
+            <h1>Bienvenido!</h1>
+            <p>¡Acá podrás encontrar los mejores libros disponibles!</p>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Últimos Libros:</h3>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <div class="row text-center">
+        {% for libro in libros[0] %}
+            <div class="col-lg-3 col-md-6 hero-feature">
+                <div class="thumbnail">
+                    <img src="{{libro.link_to_photo}}" alt="">
+                    <div class="caption">
+                        <h3>{{libro.title}}</h3>
+                        <h4>{{libro.author.get().name}} | <small>{{libro.publisher.get().name}}</small></h4>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        </div>
+        <!-- /.row -->
+
+        <hr>
+
+
+
+    {% endblock %}
