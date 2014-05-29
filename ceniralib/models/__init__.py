@@ -8,7 +8,7 @@ class Books(ndb.Model):
     """
     added = ndb.DateTimeProperty(auto_now_add=True)
     title = ndb.StringProperty()
-    author = ndb.KeyProperty()
+    author = ndb.KeyProperty(repeated=True)
     publisher = ndb.KeyProperty()
     ISBN10 = ndb.StringProperty()
     ISBN13 = ndb.StringProperty()
@@ -21,12 +21,16 @@ class Books(ndb.Model):
 
     #After added this is executed
     def _post_put_hook(self, future):
+        authors = ''
+        for a in self.author:
+            authors += a.get().name + ', '  
+
         doc = search.Document(doc_id=unicode(self.key.id()), fields=[
             search.TextField(name='name', value=self.title),
             search.TextField(name='pieces', value=utils.text_pieces(self.title)),
             search.TextField(name='id', value=unicode(self.key.id())),
             search.TextField(name='publisher', value=self.publisher.get().name),
-            search.TextField(name='author', value=self.author.get().name),
+            search.TextField(name='author', value=authors),
             search.TextField(name='photo', value=self.link_to_photo)])
         search.Index('api-books').put(doc)
 

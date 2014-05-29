@@ -5,7 +5,7 @@ from .. import handlers
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        libros = models.Books.query().fetch_page(4)
+        libros = models.Books.query().fetch_page(6)
         handlers.render_template(self, "/stivali/index.html", params= {"libros" :libros})
 
 class SearchHandler(webapp2.RequestHandler):
@@ -14,7 +14,7 @@ class SearchHandler(webapp2.RequestHandler):
 
 class UltimosLibrosHandler(webapp2.RequestHandler):
     def get(self):
-        libros = models.Books.query().order(-models.Books.added).fetch_page(10)
+        libros = models.Books.query().order(-models.Books.added).fetch_page(100)
         handlers.render_template(self, "/george/UL.html", params= {"libros" :libros})
 
 class EquipoHandler(webapp2.RequestHandler):
@@ -109,6 +109,12 @@ class AgregarEditorialHandler(webapp2.RequestHandler):
         publi.put()
         time.sleep(1)
         self.redirect('/cenira')
+
+
+class SingleBook(webapp2.RequestHandler):
+    def get(self, ide):
+        libro = models.Books.get_by_id(int(ide))
+        handlers.render_template(self, "/cesar/singlebook.html", params= {"libro" :libro})
 
 
 class TestHandler(webapp2.RequestHandler):

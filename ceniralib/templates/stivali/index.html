@@ -2,18 +2,23 @@
 {% extends "base.html" %}
 <!-- En base.html existen bloques, como por ejemplo 'title' -->
 {% block title %}
-Agregar
+Inicio
 {% endblock %}
 
 
 
 {% block html %}
+<style type="text/css">
+.itemcenira { min-height: 290px;}
+    .itemcenira  img { max-height: 200px !important;}
+    .bookcover {text-align: center;}
+</style>
 
     <div class="container">
 
         <div class="jumbotron hero-spacer">
-            <h1>Bienvenido!</h1>
-            <p>¡Acá podrás encontrar los mejores libros disponibles!</p>
+            <h1>¡Bienvenido!</h1>
+            <p>¡Acá podrás encontrar los libros disponibles en Cenira!</p>
         </div>
 
         <hr>
@@ -25,19 +30,15 @@ Agregar
         </div>
         <!-- /.row -->
 
-        <div class="row text-center">
+        <div class="row">
         {% for libro in libros[0] %}
-            <div class="col-lg-3 col-md-6 hero-feature">
-                <div class="thumbnail">
-                    <img src="{{libro.link_to_photo}}" alt="">
-                    <div class="caption">
-                        <h3>{{libro.title}}</h3>
-                        <h4>{{libro.author.get().name}} | <small>{{libro.publisher.get().name}}</small></h4>
-                    </div>
+            <div class="col-md-2 portfolio-item itemcenira">
+                <div class="bookcover">
+                    <a href="http://cit-unitec.appspot.com/cenira/libro/{{libro.key.id()}}"><img class="img-rounded" src="{{libro.link_to_photo}}"></a>
                 </div>
+                <h5><a href="http://cit-unitec.appspot.com/cenira/libro/{{libro.key.id()}}">{{libro.title}}</a></h5>
             </div>
         {% endfor %}
-
         </div>
         <!-- /.row -->
 

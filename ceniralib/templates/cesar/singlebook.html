@@ -1,0 +1,51 @@
+
+{% extends "base.html" %}
+<!-- En base.html existen bloques, como por ejemplo 'title' -->
+{% block title %}
+Inicio
+{% endblock %}
+
+
+
+{% block html %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                    <img class="img-responsive" src="{{libro.link_to_photo}}">
+            </div>
+
+            <div class="col-md-9">
+                <h2>{{libro.title}}</h2>
+                <hr>
+                {{libro.description}}
+                <hr>
+                <div>Editorial: {{libro.publisher.get().name}}</div>
+                {% if libro.edition %}<div>Edicion: {{libro.edition}}</div>{% endif %}
+                <div>
+                    Autores:
+                    <ul>
+                        {% for a in libro.author %}
+                        <li>{{a.get().name}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% if libro.ISBN10 %}<div>ISBN10: {{libro.ISBN10}}</div>{% endif %}
+                {% if libro.ISBN13 %}<div>ISBN13: {{libro.ISBN13}}</div>{% endif %}
+                {% if libro.paginas %}<div>Paginas: {{libro.paginas}}</div>{% endif %}
+                {% if libro.NumberInStock %}<div>Disponibilidad:
+                {% if libro.NumberInStock > 0 %} libro.NumberInStock {% endif %}
+                {% if libro.NumberInStock == 0 %} No hay disponibilidad{% endif %}
+
+                </div>
+                {% endif %}
+                
+                
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <hr>
+
+
+
+    {% endblock %}

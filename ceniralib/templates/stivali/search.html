@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 <!-- En base.html existen bloques, como por ejemplo 'title' -->
 {% block title %}
-<!-- Aqui se agrega el titulo -->
+Buscador | Cenira
 {% endblock %}
 
 
@@ -17,7 +17,7 @@
                     <!-- USE TWITTER TYPEAHEAD JSON WITH API TO SEARCH -->
                     <input class="form-control" id="system-search" name="q" placeholder="Nombre del libro" required>
                     <span class="input-group-btn">
-                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                        <button type="submit" class="btn btn-default" onclick="search(); return false;"><i class="glyphicon glyphicon-search"></i></button>
                     </span>
                 </div>
             </form>
@@ -44,11 +44,15 @@
 
 
 {% block scriptfooter %}
-
+<!-- -Cesar -->
 <script type="text/javascript">
     $("#system-search").keyup(function(){
-        // Retrieve the input field text and reset the count to zero
-        var query = this.value;
+        search()});
+
+    function search()
+    {
+        var query = $("#system-search").val();
+        console.log($("#system-search").val());
         if ($('#system-search').val() != ''){
             if ($('#system-search').val().length > 2){
                     $.getJSON('/cenira/api/v1/books/q/'+query, function(data) {
@@ -65,8 +69,12 @@
               }
 
         }
+        else
+        {
+           $("#table-courses-header > tbody").empty(); 
+        }
         
 
- });
+ }
     </script>
 {% endblock %}

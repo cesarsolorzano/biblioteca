@@ -8,6 +8,11 @@ Ultimos libros
 
 
 {% block html %}
+<style type="text/css">
+.itemcenira { min-height: 300px;}
+    .itemcenira  img { max-height: 200px !important;}
+    .bookcover {text-align: center;}
+</style>
 
     <div class="container">
 
@@ -23,13 +28,12 @@ Ultimos libros
 
         <div class="row">
         {% for libro in libros[0] %}
-            <div class="col-md-3 portfolio-item">
-                <a href="#project-link">
-                    <img class="img-responsive" src="{{libro.link_to_photo}}">
-                </a>
-                <h3><a href="#">{{libro.title}}</a>
-                </h3>
-                <h4>{{libro.author.get().name}} | <small>{{libro.publisher.get().name}}</small></h4>
+            <div class="col-md-2 portfolio-item itemcenira">
+                <div class="bookcover">
+                    <img class="img-rounded" src="{{libro.link_to_photo}}">
+                </div>
+                <h5><a href="http://cit-unitec.appspot.com/cenira/libro/{{libro.key.id()}}">{{libro.title}}</a></h5>
+                <h6>{% for author in libro.author %}{{ author.get().name}}{% endfor %} | <small>{{libro.publisher.get().name}}</small></h6>
             </div>
         {% endfor %}
            </div>
