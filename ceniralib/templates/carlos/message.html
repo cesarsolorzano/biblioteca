@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}
+Atencion
+{% endblock %}
+
+{% block html %}
+<div class="container">
+<legend>Atencion</legend>
+<hr>
+<p>{% autoescape off %}{{ message }}{% endautoescape %}</p>
+</div>
+{% endblock %}

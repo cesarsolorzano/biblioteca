@@ -2,6 +2,13 @@ from google.appengine.ext import ndb
 from google.appengine.api import search
 from .. import utils
 
+import time
+import webapp2_extras.appengine.auth.models
+
+from google.appengine.ext import ndb
+
+from webapp2_extras import security
+
 class Books(ndb.Model):
     """
         Base de datos para libros

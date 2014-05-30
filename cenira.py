@@ -1,5 +1,17 @@
 import webapp2
-from ceniralib.handlers import www, api
+from ceniralib.handlers import www, api, UserHandlers
+from webapp2_extras import auth
+from webapp2_extras import sessions
+
+config = {
+  'webapp2_extras.auth': {
+    'user_model': 'UserModel.User',
+    'user_attributes': ['name']
+  },
+  'webapp2_extras.sessions': {
+    'secret_key': 'YOUR_SECRET_KEY'
+  }
+}
 
 app = webapp2.WSGIApplication([    
     # MAIN
@@ -10,12 +22,16 @@ app = webapp2.WSGIApplication([
     webapp2.Route(r'/cenira/libros/buscar', handler=www.SearchHandler, name='buscar'),
     webapp2.Route(r'/cenira/autores/agregar', handler=www.AgregarAutorHandler, name='agregarautor'),
     webapp2.Route(r'/cenira/editoriales/agregar', handler=www.AgregarEditorialHandler, name='agregareditorial'),
+
+    # USUARIOS
+    webapp2.Route(r'/cenira/registrarse', handler=UserHandlers.RegistrarseHandler, name='registrarse'),
+    webapp2.Route(r'/cenira/login', handler=UserHandlers.LoginHandler, name='login'),
+    webapp2.Route(r'/cenira/logout', handler=UserHandlers.LogoutHandler, name='logout'),
     
     # API
     (r'^/cenira/api/v1/$',api.ApiMainHandler),
     webapp2.Route('/cenira/api/v1/books/q/<q>', api.ApiQueryBooksHandler),
-], debug=True)
-
+], config=config, debug=True)
 
 def main():
     run_wsgi_app(app)                                    
