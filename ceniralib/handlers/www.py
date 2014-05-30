@@ -29,7 +29,7 @@ class AgregarLibroHandler(UserHandlers.BaseHandler):
     def get(self):
         authors = models.Authors.query().fetch_page(100)
         publishers = models.Publisher.query().fetch_page(100)
-        handlers.render_template(self, "/cesar/add.html", params= {"autores":authors, 'publishers': publishers})
+        BaseHandler.render_template(self, "/cesar/add.html", params= {"autores":authors, 'publishers': publishers})
     
     def post(self):
         ISBN10 = None
@@ -75,7 +75,7 @@ class AgregarLibroHandler(UserHandlers.BaseHandler):
 class AgregarAutorHandler(UserHandlers.BaseHandler):
     @UserHandlers.user_required
     def get(self):
-        handlers.render_template(self, "/cesar/addauthor.html")
+        BaseHandler.render_template(self, "/cesar/addauthor.html")
     
     def post(self):
         name = self.request.get("name")
@@ -101,7 +101,7 @@ class AgregarAutorHandler(UserHandlers.BaseHandler):
 class AgregarEditorialHandler(UserHandlers.BaseHandler):
     @UserHandlers.user_required
     def get(self):
-        handlers.render_template(self, "/cesar/addeditorial.html")
+        BaseHandler.render_template(self, "/cesar/addeditorial.html")
     
     def post(self):
         name = self.request.get("name")
