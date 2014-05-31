@@ -1,6 +1,4 @@
-
 {% extends "base.html" %}
-<!-- En base.html existen bloques, como por ejemplo 'title' -->
 {% block title %}
 Ultimos libros
 {% endblock %}
@@ -32,7 +30,7 @@ Ultimos libros
                 <div class="bookcover">
                     <img class="img-rounded" src="{{libro.link_to_photo}}">
                 </div>
-                <h5><a href="http://cit-unitec.appspot.com/cenira/libro/{{libro.key.id()}}">{{libro.title}}</a></h5>
+                <h5><a href="/cenira/libro/{{libro.key.id()}}">{{libro.title}}</a></h5>
                 <h6>{% for author in libro.author %}{{ author.get().name}}{% endfor %} | <small>{{libro.publisher.get().name}}</small></h6>
             </div>
         {% endfor %}
