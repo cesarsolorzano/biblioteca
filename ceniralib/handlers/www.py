@@ -1,10 +1,8 @@
 import webapp2
-from .. import models
 import datetime, time
 from .. import handlers
 import UserHandlers
 from UserHandlers import BaseHandler
-import re
 
 import logging
 import os.path
