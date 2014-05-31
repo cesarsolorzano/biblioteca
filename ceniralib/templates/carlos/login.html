@@ -5,18 +5,14 @@ Entrar
 
 {% block html %}
 
-
-{% if failed %}
-
-    <strong>Fallo al loguearte!</strong> Revisa tus datos e intenta de nuevo.
-
-{% endif %}
-
 <div class="container">
   <legend>Entrar</legend>
 
     <form class="form-horizontal" role="form" action="/cenira/login" method="POST">
       <fieldset>
+	{% if failed is defined %}
+            <label><strong>Error!</strong> Revisa tus datos e intenta de nuevo.</label>
+        {% endif %}
 
       	<div class="form-group">
                <label class="col-sm-2 control-label" for="textinput">Usuario</label>
