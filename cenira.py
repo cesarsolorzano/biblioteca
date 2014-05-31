@@ -1,5 +1,5 @@
 import webapp2
-from ceniralib.handlers import www, api, UserHandlers
+from ceniralib.handlers import www, api
 from webapp2_extras import auth
 from webapp2_extras import sessions
 
@@ -16,6 +16,7 @@ config = {
 app = webapp2.WSGIApplication([    
     # MAIN
     webapp2.Route(r'/cenira', handler=www.MainHandler, name='Main'),
+    webapp2.Route(r'/cenira/libro/<ide>', handler=www.SingleBook, name='SingleBook'),
     webapp2.Route(r'/cenira/libros/ultimos', handler=www.UltimosLibrosHandler, name='UL'),
     webapp2.Route(r'/cenira/nosotros/equipo', handler=www.EquipoHandler, name='PE'),
     webapp2.Route(r'/cenira/libros/agregar', handler=www.AgregarLibroHandler, name='agregar'),
@@ -24,9 +25,9 @@ app = webapp2.WSGIApplication([
     webapp2.Route(r'/cenira/editoriales/agregar', handler=www.AgregarEditorialHandler, name='agregareditorial'),
 
     # USUARIOS
-    webapp2.Route(r'/cenira/registrarse', handler=UserHandlers.RegistrarseHandler, name='registrarse'),
-    webapp2.Route(r'/cenira/login', handler=UserHandlers.LoginHandler, name='login'),
-    webapp2.Route(r'/cenira/logout', handler=UserHandlers.LogoutHandler, name='logout'),
+    webapp2.Route(r'/cenira/registrarse', handler=www.RegistrarseHandler, name='registrarse'),
+    webapp2.Route(r'/cenira/login', handler=www.LoginHandler, name='login'),
+    webapp2.Route(r'/cenira/logout', handler=www.LogoutHandler, name='logout'),
     
     # API
     (r'^/cenira/api/v1/$',api.ApiMainHandler),

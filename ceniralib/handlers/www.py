@@ -4,6 +4,7 @@ import datetime, time
 from .. import handlers
 import UserHandlers
 from UserHandlers import BaseHandler
+import re
 
 class MainHandler(UserHandlers.BaseHandler):
     def get(self):
@@ -121,3 +122,76 @@ class SingleBook(UserHandlers.BaseHandler):
         libro = models.Books.get_by_id(int(ide))
         BaseHandler.render_template(self, "/cesar/singlebook.html", {"libro" :libro})
 
+
+
+class RegistrarseHandler(BaseHandler):
+  def get(self):
+    self.render_template('/carlos/registrarse.html')
+
+  def post(self):
+    user_name = self.request.get('username').lower()
+    email = self.request.get('email').lower()
+    password = self.request.get('password')
+    password_validar = self.request.get('password_validar')
+    name = self.request.get('name')
+    last_name = self.request.get('lastname')
+
+    # Validaciones server-side
+    if user_name == "" or email == "" or password == "" or password_validar == "":
+      BaseHandler.render_template(self, "/carlos/registrarse.html", params={'error': 'Por favor, llena todos los campos.'})
+      return
+
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+      BaseHandler.render_template(self, "/carlos/registrarse.html", params={'error': 'Por favor, introduce un email valido.'})
+      return
+
+    if not password or password != password_validar:
+      BaseHandler.render_template(self, "/carlos/registrarse.html", params={ 'error': 'Las contrase#as no coinciden.' })
+      return
+
+    # A create_user se le puede pasan los datos que necesitemos guardar del usuario
+    # estos datos se guardaran automaticamente en la sesion y sera persistente en la base de datos
+    unique_properties = ['email_address']
+    user_data = self.user_model.create_user(user_name,
+      unique_properties,
+      email_address=email,
+      name=name,
+      password_raw=password,
+      last_name=last_name,
+      verified=True,
+      role = 0)
+    if not user_data[0]: #user_data es de tipo tuple
+      BaseHandler.render_template(self, "/carlos/registrarse.html", params={ 'error': 'No fue posible crear el usuario, usuario o email ya existen'})
+      return
+
+    self.display_message('Te registraste correctamente.')
+
+
+class LoginHandler(BaseHandler):
+  def get(self):
+    self._serve_page()
+
+  def post(self):
+    username = self.request.get('username')
+    password = self.request.get('password')
+    try:
+      u = self.auth.get_user_by_password(username, password, remember=True,
+        save_session=True)
+      self.redirect(self.uri_for('Main'))
+    except (InvalidAuthIdError, InvalidPasswordError) as e:
+      logging.info('Login failed for user %s because of %s', username, type(e))
+      self._serve_page(True)
+
+  def _serve_page(self, failed=False):
+    username = self.request.get('username')
+    params = {
+      'username': username,
+      'failed': failed,
+      'login': True
+    }
+    self.render_template('/carlos/login.html', params)
+
+class LogoutHandler(BaseHandler):
+  def get(self):
+    self.auth.unset_session()
+    self.redirect(self.uri_for('Main'))

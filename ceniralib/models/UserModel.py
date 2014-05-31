@@ -1,9 +1,7 @@
-import time
-import webapp2_extras.appengine.auth.models
-
 from google.appengine.ext import ndb
-
 from webapp2_extras import security
+import webapp2_extras.appengine.auth.models
+import time
 
 class User(webapp2_extras.appengine.auth.models.User):
   def set_password(self, raw_password):

@@ -34,12 +34,9 @@ Inicio
         {% for libro in libros[0] %}
             <div class="col-md-2 portfolio-item itemcenira">
                 <div class="bookcover">
-		    """
-		        Reimplementar estos links desde codigo, estos links se caeran al 				momento de cambiar algo en las rutas (o cambiando el dominio)
-		    """
-                    <a href="http://cit-unitec.appspot.com/cenira/libro/{{libro.key.id()}}"><img class="img-rounded" src="{{libro.link_to_photo}}"></a>
+                    <a href="/cenira/libro/{{libro.key.id()}}"><img class="img-rounded" src="{{libro.link_to_photo}}"></a>
                 </div>
-                <h5><a href="http://cit-unitec.appspot.com/cenira/libro/{{libro.key.id()}}">{{libro.title}}</a></h5>
+                <h5><a href="/cenira/libro/{{libro.key.id()}}">{{libro.title}}</a></h5>
             </div>
         {% endfor %}
         </div>
