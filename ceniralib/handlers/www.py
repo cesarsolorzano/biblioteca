@@ -1,10 +1,20 @@
 import webapp2
-from .. import models
 import datetime, time
 from .. import handlers
 import UserHandlers
 from UserHandlers import BaseHandler
+
+import logging
+import os.path
+import webapp2, jinja2
+from .. import models
 import re
+
+from webapp2_extras import auth
+from webapp2_extras import sessions
+
+from webapp2_extras.auth import InvalidAuthIdError
+from webapp2_extras.auth import InvalidPasswordError
 
 class MainHandler(UserHandlers.BaseHandler):
     def get(self):
