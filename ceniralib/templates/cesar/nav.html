@@ -19,12 +19,12 @@
                     <li><a href="/cenira/nosotros/equipo">Equipo</a></li>
 
 
-		{% if not user and login is not defined %}
-		    <li><a href="/cenira/login"><button class="btn btn-primary">Entrar</button></a></li>
-		{% elif user %}
-		    <li><a href="/cenira/logout"><button class="btn btn-primary">Salir</button></a></li>
-		{% endif %}
-                    
+            		{% if not user and login is not defined %}
+            		    <li><a href="/cenira/login">Entrar</a></li>
+            		{% elif user %}
+            		    <li><a href="/cenira/logout">{{ user.name }}, Salir</a></li>
+            		{% endif %}
+                                
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

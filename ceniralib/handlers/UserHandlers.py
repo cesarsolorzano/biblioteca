@@ -6,6 +6,7 @@ import os.path
 import webapp2, jinja2
 import __init__
 from .. import models
+import re
 
 from webapp2_extras import auth
 from webapp2_extras import sessions
@@ -13,6 +14,7 @@ from webapp2_extras import sessions
 from webapp2_extras.auth import InvalidAuthIdError
 from webapp2_extras.auth import InvalidPasswordError
 
+# Decorador para verificar si hay un usuario en la sesion
 def user_required(handler):
   def check_login(self, *args, **kwargs):
     auth = self.auth
@@ -23,6 +25,8 @@ def user_required(handler):
 
   return check_login
 
+# Los demas handlers heredaran este handler, 
+# contiene informacion sobre el usuario que puede consumir el template
 class BaseHandler(webapp2.RequestHandler):
   @webapp2.cached_property
   def auth(self):
@@ -46,6 +50,7 @@ class BaseHandler(webapp2.RequestHandler):
       return self.session_store.get_session(backend="datastore")
 
 
+  # Este render template incluye la informacion del usuario en el dic params
   def render_template(self, view_filename, params=None): 
     if not params:
       params = {}
@@ -54,23 +59,20 @@ class BaseHandler(webapp2.RequestHandler):
     template = JINJA_ENVIRONMENT.get_template(view_filename)
     self.response.out.write(template.render(params))
 
+  # Funcion que permite mostrar un peque#o mensaje en una pagina nueva
   def display_message(self, message):
-    """Utility function to display a template with a simple message."""
     params = {
       'message': message
     }
-    self.render_template('message.html', params)
+    self.render_template('/carlos/message.html', params)
 
-  # this is needed for webapp2 sessions to work
+  # Lo necesita webapp2 para funcionar y para poder soltar los recursos
   def dispatch(self):
-      # Get a session store for this request.
       self.session_store = sessions.get_store(request=self.request)
 
       try:
-          # Dispatch the request.
           webapp2.RequestHandler.dispatch(self)
       finally:
-          # Save all sessions.
           self.session_store.save_sessions(self.response)
 
 
@@ -84,27 +86,39 @@ class RegistrarseHandler(BaseHandler):
     self.render_template('/carlos/registrarse.html')
 
   def post(self):
-    user_name = self.request.get('username')
-    email = self.request.get('email')
-    name = self.request.get('name')
+    user_name = self.request.get('username').lower()
+    email = self.request.get('email').lower()
     password = self.request.get('password')
+    password_validar = self.request.get('password_validar')
+    name = self.request.get('name')
     last_name = self.request.get('lastname')
 
+    # Validaciones server-side
+    if user_name == "" or email == "" or password == "" or password_validar == "":
+      BaseHandler.render_template(self, "/carlos/registrarse.html", params={'error': 'Por favor, llena todos los campos.'})
+      return
+
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+      BaseHandler.render_template(self, "/carlos/registrarse.html", params={'error': 'Por favor, introduce un email valido.'})
+      return
+
+    if not password or password != password_validar:
+      BaseHandler.render_template(self, "/carlos/registrarse.html", params={ 'error': 'Las contrase#as no coinciden.' })
+      return
+
+    # A create_user se le puede pasan los datos que necesitemos guardar del usuario
+    # estos datos se guardaran automaticamente en la sesion y sera persistente en la base de datos
     unique_properties = ['email_address']
     user_data = self.user_model.create_user(user_name,
       unique_properties,
       email_address=email, name=name, password_raw=password,
       last_name=last_name, verified=False)
     if not user_data[0]: #user_data es de tipo tuple
-      self.display_message('No fue posible crear el usuario con email %s debido a keys duplicadas %s' % (user_name, user_data[1]))
+      BaseHandler.render_template(self, "/carlos/registrarse.html",
+        params={ 'error': 'No fue posible crear el usuario, usuario o email ya existen'})
       return
 
-    user = user_data[1]
-    user_id = user.get_id()
-
-    token = self.user_model.create_signup_token(user_id)
-    
-    self.redirect(self.uri_for('login'))
+    self.display_message('Te registraste correctamente.')
 
 """
 class SetPasswordHandler(BaseHandler):
